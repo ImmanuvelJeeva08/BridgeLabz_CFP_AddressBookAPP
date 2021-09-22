@@ -11,5 +11,4 @@ public class AddressBookAppApplication {
 
         SpringApplication.run(AddressBookAppApplication.class, args);
     }
-
 }
