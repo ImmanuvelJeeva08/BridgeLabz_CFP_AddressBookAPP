@@ -16,7 +16,7 @@ public class Controller {
      */
 
     @PostMapping(value = "/addContactDetails")
-    public ResponseEntity<String> addEmployeeDetails() {
+    public ResponseEntity<String> addContactDetails() {
         log.info("Inside add contact Details");
         ResponseDTO responseDTO = new ResponseDTO("Added contact Details",null);
         return new ResponseEntity(responseDTO, HttpStatus.OK);
@@ -27,7 +27,7 @@ public class Controller {
      */
 
     @GetMapping(value = "/getContactDetails")
-    public ResponseEntity<String> getEmployeeDetails() {
+    public ResponseEntity<String> getContactDetails() {
         log.info("Inside get contact Details");
         ResponseDTO responseDTO = new ResponseDTO("Fetched all contact Details",null);
         return new ResponseEntity(responseDTO, HttpStatus.OK);
@@ -38,7 +38,7 @@ public class Controller {
      */
 
     @PutMapping(value = "/updateContactDetails")
-    public ResponseEntity<String> updateEmployeeDetails() {
+    public ResponseEntity<String> updateContactDetails() {
         log.info("Inside Update contact Details");
         ResponseDTO responseDTO = new ResponseDTO("Updated by ID : contact Details",null);
         return new ResponseEntity(responseDTO, HttpStatus.OK);
@@ -49,7 +49,7 @@ public class Controller {
      */
 
     @DeleteMapping(value = "/deleteContactDetails")
-    public ResponseEntity<String> deleteEmployeeDetails() {
+    public ResponseEntity<String> deleteContactDetails() {
         log.info("Inside delete Details");
         ResponseDTO responseDTO = new ResponseDTO("Deleted by ID : contact Details", null);
         return new ResponseEntity(responseDTO, HttpStatus.OK);
