@@ -74,7 +74,7 @@ public class AddressBookService implements InterfaceAddressBookService{
 
     @Override
     public AddressBookDTO updateContactDetails(int id, AddressBookDTO addressBookDTO) {
-        log.info("Inside updateEmployeeDetails()");
+        log.info("Inside updateContactDetails()");
         if (id > 0) {
             AddressBookDTO employeeDetails = findContactById(id);
             for (AddressBookDTO i: ContactDetails) {
@@ -95,7 +95,7 @@ public class AddressBookService implements InterfaceAddressBookService{
 
     @Override
     public void deleteContact(int id) {
-        log.info("Inside deleteEmployee()");
+        log.info("Inside deleteContact()");
         if (id > 0) {
             for (AddressBookDTO i: ContactDetails) {
                 if(i.getPersonId() == id){
