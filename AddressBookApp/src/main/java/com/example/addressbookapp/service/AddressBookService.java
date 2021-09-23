@@ -89,7 +89,10 @@ public class AddressBookService implements InterfaceAddressBookService{
     @Override
     public AddressBookDTO updateContactDetails(int id, AddressBookDTO addressBookDTO) {
         log.info("Inside updateContactDetails()");
+<<<<<<< HEAD
         AddressBookDTO contactResponse = null;
+=======
+>>>>>>> 2291d83ae31d64ec5be4a455a522a5cf64c9fbff
         if (id > 0) {
             Contact contactDetails = findContactById(id);
             String[] ignoreFields = {"personId", "firstName", "lastName"};
