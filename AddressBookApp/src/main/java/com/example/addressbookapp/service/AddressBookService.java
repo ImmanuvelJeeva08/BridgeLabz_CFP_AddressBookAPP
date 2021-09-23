@@ -76,7 +76,7 @@ public class AddressBookService implements InterfaceAddressBookService{
     private Contact findContactById(int id) {
         log.info("Inside findContactById()");
         return addressBookRepository.findById(id)
-                .orElseThrow(() -> new AddressBookException("Unable to find any Employee Payroll detail!"));
+                .orElseThrow(() -> new AddressBookException("Unable to find any Person contact detail!"));
     }
 
     /**
