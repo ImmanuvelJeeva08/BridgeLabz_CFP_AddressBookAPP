@@ -1,17 +1,28 @@
 package com.example.addressbookapp.service;
 
 import com.example.addressbookapp.dto.AddressBookDTO;
+import com.example.addressbookapp.entity.Contact;
+import com.example.addressbookapp.exception.AddressBookException;
+import com.example.addressbookapp.repository.AddressBookRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class AddressBookService implements InterfaceAddressBookService{
 
-    static ArrayList<AddressBookDTO> ContactDetails = new ArrayList<>();
+    @Autowired
+    AddressBookRepository addressBookRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     /**
      * Purpose : Ability to add contact details in AddressBook
@@ -22,11 +33,12 @@ public class AddressBookService implements InterfaceAddressBookService{
     @Override
     public AddressBookDTO addContact(AddressBookDTO addressBookDTO) {
         log.info("Inside addContact()");
-        ContactDetails.add(addressBookDTO);
+        Contact contactRequest = modelMapper.map(addressBookDTO, Contact.class);
+        addressBookRepository.save(contactRequest);
         return addressBookDTO;
     }
 
-    /**
+    /**s
      * Purpose : Ability to fetch all Contact details from AddressBook
      * @return
      */
@@ -34,7 +46,11 @@ public class AddressBookService implements InterfaceAddressBookService{
     @Override
     public List<AddressBookDTO> getContact() {
         log.info("Inside getContact()");
-        return ContactDetails;
+        return addressBookRepository.findAll().stream().map(Contact -> {
+            return new AddressBookDTO(Contact.getPersonId(),Contact.getFirstName(),Contact.getLastName(),
+                    Contact.getAddress(),Contact.getCity(),Contact.getState(), Contact.getZip(),
+                    Contact.getPhoneNumber(),Contact.getEmail());
+        }).collect(Collectors.toList());
     }
 
     /**
@@ -46,7 +62,9 @@ public class AddressBookService implements InterfaceAddressBookService{
     @Override
     public AddressBookDTO getContactByID(int id) {
         log.info("Inside getContactByID()");
-        return findContactById(id);
+        Contact contact = findContactById(id);
+        AddressBookDTO contactResponse = modelMapper.map(contact, AddressBookDTO.class);
+        return contactResponse;
     }
 
     /**
@@ -55,36 +73,31 @@ public class AddressBookService implements InterfaceAddressBookService{
      * @return
      */
 
-    private AddressBookDTO findContactById(int id) {
+    private Contact findContactById(int id) {
         log.info("Inside findContactById()");
-        for (AddressBookDTO i: ContactDetails) {
-            if(i.getPersonId() == id){
-                return i;
-            }
-        }
-        return null;
+        return addressBookRepository.findById(id)
+                .orElseThrow(() -> new AddressBookException("Unable to find any Employee Payroll detail!"));
     }
 
     /**
      * Purpose : Ability to update Contact details in AddressBook using ID
      * @param id
-     * @param
+     * @param addressBookDTO
      * @return
      */
 
     @Override
     public AddressBookDTO updateContactDetails(int id, AddressBookDTO addressBookDTO) {
-        log.info("Inside updateEmployeeDetails()");
+        log.info("Inside updateContactDetails()");
+        AddressBookDTO contactResponse = null;
         if (id > 0) {
-            AddressBookDTO employeeDetails = findContactById(id);
-            for (AddressBookDTO i: ContactDetails) {
-                if(i.getPersonId() == id){
-                    int index = i.getPersonId();
-                    ContactDetails.add(index-1,employeeDetails);
-                }
-            }
+            Contact contactDetails = findContactById(id);
+            String[] ignoreFields = {"personId", "firstName", "lastName"};
+            BeanUtils.copyProperties(addressBookDTO, contactDetails, ignoreFields);
+            addressBookRepository.save(contactDetails);
+            contactResponse = modelMapper.map(contactDetails, AddressBookDTO.class);
         }
-        return addressBookDTO;
+        return contactResponse;
     }
 
     /**
@@ -95,13 +108,10 @@ public class AddressBookService implements InterfaceAddressBookService{
 
     @Override
     public void deleteContact(int id) {
-        log.info("Inside deleteEmployee()");
+        log.info("Inside deleteContact()");
         if (id > 0) {
-            for (AddressBookDTO i: ContactDetails) {
-                if(i.getPersonId() == id){
-                    ContactDetails.remove(i);
-                }
-            }
+                Contact contact = findContactById(id);
+                addressBookRepository.delete(contact);
         }
     }
 }
