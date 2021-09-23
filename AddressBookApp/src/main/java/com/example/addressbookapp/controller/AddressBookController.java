@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/addressBook")
 @Slf4j
-public class Controller {
+public class AddressBookController {
 
     /**
      * Purpose : Ability to add contact details in AddressBook
      */
 
     @PostMapping(value = "/addContactDetails")
-    public ResponseEntity<String> addContactDetails() {
+    public ResponseEntity<String> addContactDetails( ) {
         log.info("Inside add contact Details");
         ResponseDTO responseDTO = new ResponseDTO("Added contact Details",null);
         return new ResponseEntity(responseDTO, HttpStatus.OK);
