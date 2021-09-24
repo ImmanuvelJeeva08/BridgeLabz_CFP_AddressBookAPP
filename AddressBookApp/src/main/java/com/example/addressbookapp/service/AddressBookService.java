@@ -10,13 +10,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class AddressBookService implements InterfaceAddressBookService{
+public class AddressBookService implements IAddressBookService {
 
     @Autowired
     AddressBookRepository addressBookRepository;
@@ -55,8 +54,8 @@ public class AddressBookService implements InterfaceAddressBookService{
 
     /**
      * Purpose : Ability to fetch contact details from AddressBook using ID
-     * @param
-     * @return
+     * @param id
+     * @return contactResponse
      */
 
     @Override
@@ -70,7 +69,7 @@ public class AddressBookService implements InterfaceAddressBookService{
     /**
      * Purpose : Ability to update Contact details in AddressBook using ID
      * @param id
-     * @return
+     * @return contact
      */
 
     private Contact findContactById(int id) {
@@ -83,16 +82,13 @@ public class AddressBookService implements InterfaceAddressBookService{
      * Purpose : Ability to update Contact details in AddressBook using ID
      * @param id
      * @param addressBookDTO
-     * @return
+     * @return contactResponse
      */
 
     @Override
     public AddressBookDTO updateContactDetails(int id, AddressBookDTO addressBookDTO) {
         log.info("Inside updateContactDetails()");
-<<<<<<< HEAD
         AddressBookDTO contactResponse = null;
-=======
->>>>>>> 2291d83ae31d64ec5be4a455a522a5cf64c9fbff
         if (id > 0) {
             Contact contactDetails = findContactById(id);
             String[] ignoreFields = {"personId", "firstName", "lastName"};
@@ -106,7 +102,6 @@ public class AddressBookService implements InterfaceAddressBookService{
     /**
      * Purpose : Ability to delete contact details from AddressBook using ID
      * @param id
-     * @return
      */
 
     @Override
@@ -116,5 +111,25 @@ public class AddressBookService implements InterfaceAddressBookService{
                 Contact contact = findContactById(id);
                 addressBookRepository.delete(contact);
         }
+    }
+
+    /**
+     * Purpose : Ability to Fetch contact details from AddressBook using City
+     * @param city
+     */
+
+    @Override
+    public List<Contact> getContactByCity(String city) {
+        return addressBookRepository.getContactByCity(city);
+    }
+
+    /**
+     * Purpose : Ability to Fetch contact details from AddressBook using City
+     * @param state
+     */
+
+    @Override
+    public List<Contact> getContactByState(String state) {
+        return addressBookRepository.getContactByState(state);
     }
 }

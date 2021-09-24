@@ -17,6 +17,6 @@ public class Contact {
     private String city;
     private String state;
     private int zip;
-    private long phoneNumber;
+    private String phoneNumber;
     private String email;
 }

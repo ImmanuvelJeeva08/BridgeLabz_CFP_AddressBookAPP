@@ -2,6 +2,7 @@ package com.example.addressbookapp.controller;
 
 import com.example.addressbookapp.dto.AddressBookDTO;
 import com.example.addressbookapp.dto.ResponseDTO;
+import com.example.addressbookapp.entity.Contact;
 import com.example.addressbookapp.service.AddressBookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,7 @@ public class AddressBookController {
      * Purpose : Ability to update contact details in AddressBooks
      */
 
-    @PutMapping(value = "/updateContactDetails")
+    @PutMapping(value = "/updateContactDetailsByID")
     public ResponseEntity<ResponseDTO> updateContactDetails(@RequestParam(name = "id") int id,
                                                       @Valid @RequestBody AddressBookDTO addressBookDTO) {
         log.info("Inside Update contact Details");
@@ -76,11 +77,35 @@ public class AddressBookController {
      * Purpose : Ability to delete contact details in AddressBook
      */
 
-    @DeleteMapping(value = "/deleteContactDetails")
+    @DeleteMapping(value = "/deleteContactDetailsByID")
     public ResponseEntity<ResponseDTO> deleteContactDetails(@RequestParam(name = "id") int id) {
         log.info("Inside delete Details");
         addressBookService.deleteContact(id);
         ResponseDTO responseDTO = new ResponseDTO("Deleted by ID : contact Details", null);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    /**
+     * Purpose : Ability to Fetch contact Details from AddressBook by Using City
+     */
+
+    @GetMapping("/getContactDetailsByCity")
+    public ResponseEntity<ResponseDTO> getContactDetailsByCity(@RequestParam(name = "city") String city){
+        log.info("Inside get contact Details By City");
+        List<Contact> cityList = addressBookService.getContactByCity(city);
+        ResponseDTO responseDTO = new ResponseDTO("Fetched given city contact Details",cityList);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    /**
+     * Purpose : Ability to Fetch contact Details from AddressBook by Using State
+     */
+
+    @GetMapping("/getContactDetailsByState")
+    public ResponseEntity<ResponseDTO> getContactDetailsByState(@RequestParam(name = "state") String state){
+        log.info("Inside get contact Details By State");
+        List<Contact> stateList = addressBookService.getContactByState(state);
+        ResponseDTO responseDTO = new ResponseDTO("Fetched given state contact Details",stateList);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 }
