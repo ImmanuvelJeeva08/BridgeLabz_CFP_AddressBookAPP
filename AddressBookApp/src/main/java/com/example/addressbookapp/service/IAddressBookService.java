@@ -14,4 +14,6 @@ public interface IAddressBookService {
 
     List<Contact> getContactByCity(String city);
     List<Contact> getContactByState(String state);
+
+    List<Contact> getAllContacts(Integer pageNo, Integer pageSize, String sortBy);
 }

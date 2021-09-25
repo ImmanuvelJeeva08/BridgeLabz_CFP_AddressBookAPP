@@ -6,6 +6,7 @@ import com.example.addressbookapp.entity.Contact;
 import com.example.addressbookapp.service.AddressBookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -107,5 +108,19 @@ public class AddressBookController {
         List<Contact> stateList = addressBookService.getContactByState(state);
         ResponseDTO responseDTO = new ResponseDTO("Fetched given state contact Details",stateList);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    /**
+     * Purpose : Ability to Fetch contact Details from AddressBook by Using Page
+     */
+
+    @GetMapping
+    public ResponseEntity<List<Contact>> getAllContacts(
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "personId") String sortBy) {
+
+        List<Contact> list = addressBookService.getAllContacts(pageNo, pageSize, sortBy);
+        return new ResponseEntity<List<Contact>>(list, new HttpHeaders(), HttpStatus.OK);
     }
 }

@@ -3,13 +3,19 @@ package com.example.addressbookapp.service;
 import com.example.addressbookapp.dto.AddressBookDTO;
 import com.example.addressbookapp.entity.Contact;
 import com.example.addressbookapp.exception.AddressBookException;
+import com.example.addressbookapp.repository.AddressBookPageRepository;
 import com.example.addressbookapp.repository.AddressBookRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +25,9 @@ public class AddressBookService implements IAddressBookService {
 
     @Autowired
     AddressBookRepository addressBookRepository;
+
+    @Autowired
+    AddressBookPageRepository addressBookPageRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -131,5 +140,24 @@ public class AddressBookService implements IAddressBookService {
     @Override
     public List<Contact> getContactByState(String state) {
         return addressBookRepository.getContactByState(state);
+    }
+
+    /**
+     * Purpose : Ability to Fetch contact details from AddressBook using page
+     * @param pageNo
+     * @param pageSize
+     * @param sortBy
+     */
+
+    public List<Contact> getAllContacts(Integer pageNo, Integer pageSize, String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+
+        Page<Contact> pagedResult = addressBookPageRepository.findAll(paging);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<Contact>();
+        }
     }
 }
